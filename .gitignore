@@ -1,0 +1,16 @@
+*~
+*.egg/
+*.pyc
+*.pyo
+build
+.coverage
+.eggs/
+_readthedocs_build
+/TAGS
+/tags
+*.egg-info/
+dist/
+htmlcov/
+.cache/
+.pytest_cache/
+.ipynb_checkpoints/
