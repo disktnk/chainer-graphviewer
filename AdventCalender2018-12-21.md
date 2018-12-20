@@ -133,7 +133,7 @@ show_graph(gdef)
 
 ## Chainer モデルの可視化
 
-Chainer で作ったモデルを同じく表示してみます。やることは簡単で、上の ONNX→`tf.GrafDef` の変換と同じように、Chainer の Node を変換すればいいだけです。Chainer に標準で入っている `computational_graph` を使います。
+Chainer で作ったモデルを同じく表示してみます。やることは簡単で、上の ONNX→`tf.GraphDef` の変換と同じように、Chainer の Node を変換すればいいだけです。Chainer に標準で入っている `computational_graph` を使います。
 
 ```Python
 from collections import Counter
@@ -275,5 +275,9 @@ $ pip install git+https://github.com/disktnk/chainer-graphviewer
 
 
 ## まとめというかポエム
+
+社内の人にネットワークグラフの可視化について聞くと「不要、絶対使わない」派と「あったらあったで使う (かも)」派に別れているので、まずは世の中どんなツールがあるのかいろいろとネットサーフィンしてたら、上述の so の記事を見つけたので、サクッと(*) Chainer に対応してみました (ホントは ChainerUI の宣伝記事書こうと思っていた)。このあたりに一家言ある方は、ぜひ @disktnk までコメントください。
+
+(*) 正直言うと、Chainer の知識が v3 あたりで止まっていたせいで、そんなにサクッとはできなかった。
 
 静的 HTML データを GAE に配置して、部分的に呼び出す、というアイディアは、自分の頭を逆さに振っても出なかったので、やっぱ Google さんは強いなぁ、と思いましたとさ。
