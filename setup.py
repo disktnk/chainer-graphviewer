@@ -10,7 +10,12 @@ setup(
     author='Daisuke Tanaka',
     author_email='duaipp@gmail.com',
     url='https://github.com/disktnk/chainer-graphviewer',
-    packages=['graphviewer'],
+    packages=[
+        'graphviewer',
+        'graphviewer.notebook',
+        'graphviewer.parser',
+        'graphviewer.proto',
+    ],
     install_requires=[
         'numpy>=1.15.4',
         'protobuf>=3.6.1',
