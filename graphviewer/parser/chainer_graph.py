@@ -1,3 +1,5 @@
+from collections import Counter
+
 import chainer
 from chainer.computational_graph import build_computational_graph
 import numpy
@@ -22,6 +24,23 @@ def parse(outputs):
     input_dict = {}
     for head, tail in cgraph.edges:
         input_dict.setdefault(id(tail), []).append(head)
+
+    name_cnt = Counter()
+    id_to_name = {}
+
+    def name_resolver(node):
+        name = id_to_name.get(id(node), None)
+        if name is not None:
+            return name
+        if isinstance(node, chainer.variable.VariableNode):
+            name = 'Variable{:d}'.format(name_cnt['Variable'])
+            name_cnt['Variable'] += 1
+        else:
+            name = '{}{:d}'.format(node.label, name_cnt[node.label])
+            name_cnt[node.label] += 1
+        id_to_name[id(node)] = name
+        return name
+
     for node in cgraph.nodes:
         assert isinstance(node, (
             chainer.variable.VariableNode, chainer.function_node.FunctionNode))
@@ -30,7 +49,7 @@ def parse(outputs):
             shpeproto = TensorShapeProto(
                 dim=[TensorShapeProto.Dim(size=s) for s in node.shape])
             nodes.append(NodeDef(
-                name=get_unique_name(node).encode(encoding='utf_8'),
+                name=name_resolver(node).encode(encoding='utf_8'),
                 op='Variable',
                 input=[],
                 attr={
@@ -39,19 +58,15 @@ def parse(outputs):
                 }
             ))
         else:
-            inputs = [get_unique_name(n).encode(encoding='utf_8') for n in input_dict[id(node)]]
+            inputs = [name_resolver(n).encode(encoding='utf_8') for n in input_dict[id(node)]]
             attr = node.label.encode(encoding='utf_8')  # TODO
             nodes.append(NodeDef(
-                name=get_unique_name(node).encode(encoding='utf_8'),
+                name=name_resolver(node).encode(encoding='utf_8'),
                 op=node.__class__.__name__,
                 input=inputs,
                 attr={'parameters': AttrValue(s=attr)},
             ))
     return GraphDef(node=nodes, versions=VersionDef(producer=22))
-
-
-def get_unique_name(node):
-    return id(node)
 
 
 def forward(model, args):
