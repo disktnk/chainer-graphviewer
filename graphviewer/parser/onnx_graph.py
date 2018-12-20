@@ -22,7 +22,7 @@ def parse(graph):
         nodes_proto.append(node)
 
     for node in nodes_proto:
-        shapreproto = TensorShapeProto(
+        shapeproto = TensorShapeProto(
             dim=[TensorShapeProto.Dim(size=d.dim_value) for d in node.type.tensor_type.shape.dim])
         nodes.append(NodeDef(
             name=node.name.encode(encoding='utf_8'),
@@ -30,7 +30,7 @@ def parse(graph):
             input=[],
             attr={
                 'dtype': AttrValue(type=node.type.tensor_type.elem_type),
-                'shape': AttrValue(shape=shapreproto),
+                'shape': AttrValue(shape=shapeproto),
             }
         ))
 
