@@ -9,7 +9,7 @@ $ pip install git+https://github.com/disktnk/chainer-graphviewer
 * This tool is run on Jupyter Notebook
 * if view ONNX model, need `$ pip install onnx`
 * if view Chainer model, need `$ pip install chainer`
-* if only use `show_graph`, Tensorflow user for example, don't have to install ONNX or Chainer module
+* if only use `show_graph`, e.g. Tensorflow user, don't have to install ONNX or Chainer module
 
 ## Example for Chainer
 
@@ -27,7 +27,6 @@ model = L.Classifier(Net())
 
 x = chainer.Variable(numpy.random.rand(1, 1, 28, 28).astype(numpy.float32))
 t = chainer.Variable(numpy.random.rand(1).astype(numpy.int32))
-y = model(x, t)
 
 gdef = get_graphdef_from_model(model, (x, t))
 show_graph(gdef)
